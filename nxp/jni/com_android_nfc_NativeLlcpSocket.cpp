@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#include <android/log.h>
+
 #include <semaphore.h>
 #include <errno.h>
 

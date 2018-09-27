@@ -30,7 +30,7 @@ import android.util.Log;
 import com.android.nfc.NfcDiscoveryParameters;
 
 import java.io.File;
-
+import java.io.FileDescriptor;
 /**
  * Native interface to the NFC Manager functions
  */
@@ -140,7 +140,7 @@ public class NativeNfcManager implements DeviceHost {
     }
 
     @Override
-    public boolean routeAid(byte[] aid, int route) {
+    public boolean routeAid(byte[] aid, int route, int aidInfo) {
         return false;
     }
 
@@ -172,6 +172,33 @@ public class NativeNfcManager implements DeviceHost {
     @Override
     public int getLfT3tMax() {
         return 0;
+    }
+
+    @Override
+    public native void doSetScreenState(int screen_state_mask);
+
+    private native void doEnableDtaMode();
+
+    private native void doDisableDtaMode();
+
+    private native void doDump(FileDescriptor fd);
+    @Override
+    public void dump(FileDescriptor fd) {
+        doDump(fd);
+    }
+
+    @Override
+    public native int getNciVersion();
+
+    @Override
+    public void disableDtaMode() {
+        Log.d(TAG,"disableDtaMode : entry");
+        doDisableDtaMode();
+    }
+
+    @Override
+    public void enableDtaMode() {
+        doEnableDtaMode();
     }
 
     private native void doEnableDiscovery(int techMask,
@@ -362,12 +389,6 @@ public class NativeNfcManager implements DeviceHost {
     @Override
     public int getDefaultLlcpRwSize() {
         return DEFAULT_LLCP_RWSIZE;
-    }
-
-    private native String doDump();
-    @Override
-    public String dump() {
-        return doDump();
     }
 
     /**
